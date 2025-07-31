@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Weather App - 5 Day Forecast</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      color: #fff;
+      padding-top: 40px;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    .weather-container {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 20px 30px;
+      border-radius: 12px;
+      text-align: center;
+      width: 90%;
+      max-width: 600px;
+    }
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      width: 200px;
+      margin-right: 10px;
+    }
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      background-color: #0066cc;
+      color: white;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 20px;
+    }
+    .forecast {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 20px;
+      gap: 15px;
+    }
+    .day {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 10px;
+      min-width: 120px;
+      text-align: center;
+    }
+    .day img {
+      width: 48px;
+      height: 48px;
+    }
+  </style>
+</head>
+<body>
+  <h1>5-Day Weather Forecast</h1>
+  <div class="weather-container">
+    <input type="text" id="locationInput" placeholder="Enter location" />
+    <button onclick="getWeather()">Get Forecast</button>
+    <div class="result" id="weatherResult"></div>
+  </div>
+
+  <script>
+    async function getWeather() {
+      const location = document.getElementById("locationInput").value.trim();
+      const apiKey = "786d140d9cc14388a14105357253107";
+      if (!location) {
+        alert("Please enter a location.");
+        return;
+      }
+
+      const url = `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(location)}&days=5&aqi=no`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Location not found");
+
+        const data = await response.json();
+        const forecastDays = data.forecast.forecastday;
+
+        let html = `
+          <h2>${data.location.name}, ${data.location.country}</h2>
+          <p><strong>Current Temperature:</strong> ${data.current.temp_c}°C</p>
+          <p><strong>Condition:</strong> ${data.current.condition.text}</p>
+          <img src="${data.current.condition.icon}" alt="weather icon" />
+          <h3>5-Day Forecast</h3>
+          <div class="forecast">
+        `;
+
+        forecastDays.forEach(day => {
+          html += `
+            <div class="day">
+              <p><strong>${day.date}</strong></p>
+              <img src="${day.day.condition.icon}" alt="${day.day.condition.text}" />
+              <p>${day.day.condition.text}</p>
+              <p>Max: ${day.day.maxtemp_c}°C</p>
+              <p>Min: ${day.day.mintemp_c}°C</p>
+            </div>
+          `;
+        });
+
+        html += `</div>`;
+        document.getElementById("weatherResult").innerHTML = html;
+
+      } catch (error) {
+        document.getElementById("weatherResult").innerHTML = `<p style="color: yellow;">Error: ${error.message}</p>`;
+      }
+    }
+  </script>
+</body>
+</html>
