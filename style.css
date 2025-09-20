@@ -1,0 +1,12 @@
+body, html { margin:0; padding:0; height:100%; font-family: Arial, sans-serif; }
+body { display:flex; justify-content:center; align-items:center; background: #74ebd5; transition: background 0.5s; }
+.container { background: rgba(255,255,255,0.9); border-radius:10px; padding:20px; max-width:400px; text-align:center; }
+input { width:70%; padding:8px; margin:10px 0; border-radius:4px; border:1px solid #ccc; }
+button { padding:8px 16px; border:none; border-radius:4px; background:#0077ff; color:white; cursor:pointer; }
+button:hover { background:#005fcc; }
+.weather-section { margin-top:20px; }
+#today img { width:64px; height:64px; }
+.forecast-section { display:flex; justify-content:space-between; margin-top:20px; }
+.forecast-day { background:#eef; padding:10px; border-radius:6px; width:60px; }
+.forecast-day img { width:48px; height:48px; }
+.attribution { margin-top:20px; font-size:0.8em; }
